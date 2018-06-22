@@ -2,6 +2,7 @@ module Mapbox.GL.Expression
     exposing
         ( Expression
         , encode
+        , case_
         , at
         , get
         , get_
@@ -72,7 +73,7 @@ module Mapbox.GL.Expression
 @docs at, get, get_, has, length
 
 ## Decision
-@docs not,and,or,eq,neq,gt,lt,lte,gte,all,any
+@docs not,and,or,eq,neq,gt,lt,lte,gte,all,any,case_
 
 ## Math
 @docs add, sub, mult, div, mod, pow, neg, abs, acos, asin,atan, ceil, cos, floor, ln, ln2, log10, round,sin,sqrt,tan,min,max
@@ -436,6 +437,16 @@ stringLength (E expr) =
 
 
 -- Logical operations ----------------------------------------------------------
+
+
+{-| -}
+case_ : List ( Expression Bool, Expression a ) -> Expression a -> Expression a
+case_ cases (E default) =
+    let
+        cs =
+            List.map (\( E b, E a ) -> ( b, a )) cases
+    in
+        E <| Case cs default
 
 
 {-| Logical negation. Returns true if the input is false, and false if the input is true.
